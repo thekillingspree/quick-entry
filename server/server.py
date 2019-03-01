@@ -5,7 +5,7 @@ from user import user_routes
 
 
 app = Flask(__name__)
-#CORS - Cross Origin Resource Sharing - This needs to be enabled to use our API/server with our app/web since the server the client will have different origins.
+#CORS - Cross Origin Resource Sharing - This needs to be enabled to use our API/server with our app/website since the server the client will have different origins.
 CORS(app)
 
 app.register_blueprint(admin_routes)
