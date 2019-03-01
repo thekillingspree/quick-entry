@@ -9,6 +9,12 @@ user_routes = Blueprint('user_routes', __name__)
 
 @user_routes.route('/api/users/signup', methods=['POST'])
 def signin():
+    '''
+    Route for signing up a new user (eg: student). 
+    Uses bcrypt to hash passwords. These hashes are then stored in the collection, thus improving the security.
+    Returns a json response with the created user document and a JWT Authorization token with status code 200 on successful requests.
+    Returns an error message as json response with status code 400 on unsuccessful request.
+    '''
     try:
         username = request.json['username']
         fullname = request.json['fullname']
@@ -28,6 +34,12 @@ def signin():
 
 @user_routes.route('/api/users/login', methods=['POST'])
 def login():
+    ''' 
+    Route for logging in a user. 
+    Bcrypt is used for checking the provided password with the hash stored in the database.
+    Returns a json response with the created admin document and a JWT Authorization token with status code 200 on successful requests.
+    Returns an error message as json response with status code 400 on unsuccessful request.
+    '''
     try:
         username = request.json['username']
         password = request.json['password']
