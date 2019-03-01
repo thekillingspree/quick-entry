@@ -1,6 +1,6 @@
 ﻿# Quick-Entry
 
-Quick-entry for TEC
+Quick-entry for ***Terna Engineering College***
 
 ## Setup
 
