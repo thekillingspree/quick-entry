@@ -15,6 +15,7 @@ def admin_login_required(f):
             payload = jwt.decode(token, SECRET, algorithms=['HS256'])
             if not payload:
                 raise Exception('Admin privileges required. Please Login.')
+            g.admin = payload
             return f(*args, **kwargs)
         except InvalidSignatureError:
             return jsonify({'error': 'Signature verification failed.'}), 401
