@@ -16,7 +16,7 @@ Create and activate a new virtual environment.
 
     $ virtualenv venv
     $ ./venv/Scripts/activate
-**Note:**  You need to run the activate.bat or activate file on cmd and activate.ps1 on powershell.
+**Note(WINDOWS):**  You need to run the activate.bat or activate file on cmd and activate.ps1 on powershell.
 
 Install Required modules
 
