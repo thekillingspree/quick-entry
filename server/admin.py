@@ -1,6 +1,7 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, g
 from db import Admin
 from keys import SECRET
+from middleware.login import *
 import bcrypt
 import json
 import jwt
@@ -51,3 +52,17 @@ def login():
         return jsonify({"error": "Need all values"}), 400
     except Exception as e:
         return jsonify({"error": str(e)}), 404
+
+@admin_routes.route('/api/admin/rooms', methods=['GET'])
+@admin_login_required
+@admin_is_authorized
+def getallrooms():
+    try:
+        admin = Admin.objects(id=g.admin['id']).first()
+        allrooms = []
+        for room in admin.rooms:
+            roomdict = json.loads(room.to_json())
+            allrooms.append(roomdict)
+        return jsonify(allrooms), 200
+    except Exception as e:
+        return {'error': str(e)}, 400
