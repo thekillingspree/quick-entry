@@ -10,6 +10,7 @@ class Room(Document):
     name = StringField(required=True)
     roomnumber = IntField(required=True)
     capacity = IntField(required=True)
+    current = IntField(default=0)
     entrylist = ListField(ReferenceField('Entry')) #String used, since Entry class is defined after Room
 
 

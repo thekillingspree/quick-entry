@@ -95,6 +95,8 @@ def enter():
             raise Exception("You have not signed up.")
         if user.currentroom and (user.currentroom.id == room.id):
             raise Exception('You have already entered inside the room.')
+        if room.current == room.capacity:
+            raise Exception('Room full. You cannot enter now. Please come again after sometime.')
         user.currentroom = room
         #TODO: Decide whether to add room to history on entering or after entring
         entry.user = user
