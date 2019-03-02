@@ -8,6 +8,13 @@ from db import Admin, User
 from keys import SECRET
 
 def admin_login_required(f):
+    '''
+    Login Required View Decorator / Middleware.
+    This is a middleware used to check if the token provided in the Authorization header(Bearer) belongs to a valid admin or not. 
+    JWT Tokens are provided in Authorization header -> 'Bearer <token>'
+    This middleware performs the above mentioned checks and returns the wrapped function if the tokens are validated.
+    The flask application context, i.e g is then set to the found admin.
+    '''
     @wraps(f)
     def dec_fn(*args, **kwargs):
         try:
@@ -28,6 +35,11 @@ def admin_login_required(f):
     return dec_fn
 
 def admin_is_authorized(f):
+    '''
+    Authorization View Decorator/ Middleware
+    This middleware functions works just like the login required middleware. 
+    It compares the id provided as url parameter with the id stored in the token payload, to see if the current admin is authorized to access the resource.
+    '''
     @wraps(f)
     def dec_fn(*args, **kwargs):
         try:
@@ -49,6 +61,9 @@ def admin_is_authorized(f):
     return dec_fn
 
 def user_login_required(f):
+    '''
+    Same as the admin_login_required middelware, except it deals with the user model.
+    '''
     @wraps(f)
     def dec_fn(*args, **kwargs):
         try:
@@ -69,6 +84,9 @@ def user_login_required(f):
     return dec_fn
 
 def user_is_authorized(f):
+    '''
+    Same as the admin_is_authorized middelware, except it deals with the user model.
+    '''
     @wraps(f)
     def dec_fn(*args, **kwargs):
         try:
