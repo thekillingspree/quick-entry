@@ -33,6 +33,8 @@ def admin_is_authorized(f):
         try:
             token = request.headers['Authorization'].split()[1]
             payload = jwt.decode(token, SECRET, algorithms=['HS256'])
+            if not request.args.get('id'):
+                raise Exception('id query not provided')
             if (not payload) or payload['id'] != request.args.get('id'):
                 raise Exception('You are not authorized')
             return f(*args, **kwargs)
@@ -72,6 +74,8 @@ def user_is_authorized(f):
         try:
             token = request.headers['Authorization'].split()[1]
             payload = jwt.decode(token, SECRET, algorithms=['HS256'])
+            if not request.args.get('uid'):
+                raise Exception('uid query not provided')
             if not payload or payload['id'] != request.args.get('uid'):
                 raise Exception('You are not authorized.')
             return f(*args, **kwargs)

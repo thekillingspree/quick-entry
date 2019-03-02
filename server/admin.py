@@ -65,4 +65,4 @@ def getallrooms():
             allrooms.append(roomdict)
         return jsonify(allrooms), 200
     except Exception as e:
-        return {'error': str(e)}, 400
+        return jsonify({'error': str(e)}), 400

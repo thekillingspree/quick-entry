@@ -8,7 +8,7 @@ class Room(Document):
     The entrylist property is a ListField containing a Reference to all the users who have entered the room.
     '''
     name = StringField(required=True)
-    roomnumber = IntField(required=True, unique=True)
+    roomnumber = IntField(required=True)
     capacity = IntField(required=True)
     entrylist = ListField(ReferenceField('User')) #String used, since User class is defined after Room
 
@@ -25,6 +25,7 @@ class User(Document):
     email = StringField(required=True)
     password = StringField(required=True)
     tecid = StringField(required=True, unique=True)
+    currentroom = ReferenceField(Room)
     history = ListField(ReferenceField(Room))
 
 

@@ -1,10 +1,11 @@
 from flask import Blueprint, request, jsonify, g
+from mongoengine.errors import ValidationError
 import bcrypt
 import jwt
 import json
 
 from middleware.login import user_login_required, user_is_authorized
-from db import User
+from db import User, Room
 from keys import SECRET
 
 user_routes = Blueprint('user_routes', __name__)
@@ -64,11 +65,44 @@ def login():
 def profile():
     try:
         user = User.objects(id=g.user['id']).first()
+        if not user:
+            raise Exception('User not found.')
         userdict = json.loads(user.to_json())
         del userdict['password']
         userdict['history'] = []
+        if user.currentroom:
+            cd = json.loads(user.currentroom.to_json())
+            del cd['entrylist']
+            userdict['currentroom'] = cd
         for room in user.history:
-            userdict['history'].append(json.loads(room.to_json()))
+            rd = json.loads(room.to_json())
+            del rd['entrylist']
+            userdict['history'].append(rd)
         return jsonify(userdict), 200
     except Exception as e:
-        return {'error': str(e)}, 400
+        return jsonify({'error': str(e)}), 400
+
+@user_routes.route('/api/users/enter', methods=['POST'])
+def enter():
+    try:
+        rid = request.json['id']
+        room = Room.objects(id=rid).first()
+        #TODO: Instead of uid, we have to use regex and validate the tecid of student. This will reduce database fetches on the client side.
+        user = User.objects(id=request.json['uid']).first() 
+        if not user:
+            raise Exception("You have not signed up.")
+        if user.currentroom and (user.currentroom.id == room.id):
+            raise Exception('You have already entered inside the room.')
+        user.currentroom = room
+        #TODO: Decide whether to add room to history on entering or after entring
+        user.history.append(room)
+        room.entrylist.append(user)
+        user.save()
+        room.save()
+        return jsonify({'result': 'SUCCESS'}), 200
+    except KeyError:
+        return jsonify({'error': 'id and uid is required.'}), 400
+    except ValidationError:
+        return jsonify({'error': 'Please provide a valid id'}), 400
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
