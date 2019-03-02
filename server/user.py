@@ -1,9 +1,11 @@
-from flask import Blueprint, request, jsonify
-from db import User
-from keys import SECRET
+from flask import Blueprint, request, jsonify, g
 import bcrypt
 import jwt
 import json
+
+from middleware.login import user_login_required, user_is_authorized
+from db import User
+from keys import SECRET
 
 user_routes = Blueprint('user_routes', __name__)
 
