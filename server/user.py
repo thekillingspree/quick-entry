@@ -3,9 +3,10 @@ from mongoengine.errors import ValidationError
 import bcrypt
 import jwt
 import json
+import time
 
 from middleware.login import user_login_required, user_is_authorized
-from db import User, Room
+from db import User, Room, Entry
 from keys import SECRET
 
 user_routes = Blueprint('user_routes', __name__)
@@ -74,10 +75,12 @@ def profile():
             cd = json.loads(user.currentroom.to_json())
             del cd['entrylist']
             userdict['currentroom'] = cd
-        for room in user.history:
-            rd = json.loads(room.to_json())
-            del rd['entrylist']
-            userdict['history'].append(rd)
+        for entry in user.history:
+            ed = json.loads(entry.to_json())
+            ed['room'] = json.loads(entry.room.to_json())
+            ed['user'] = json.loads(entry.user.to_json())
+            del ed['user']['password']
+            userdict['history'].append(ed)
         return jsonify(userdict), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 400
@@ -89,14 +92,19 @@ def enter():
         room = Room.objects(id=rid).first()
         #TODO: Instead of uid, we have to use regex and validate the tecid of student. This will reduce database fetches on the client side.
         user = User.objects(id=request.json['uid']).first() 
+        entry = Entry()
         if not user:
             raise Exception("You have not signed up.")
         if user.currentroom and (user.currentroom.id == room.id):
             raise Exception('You have already entered inside the room.')
         user.currentroom = room
         #TODO: Decide whether to add room to history on entering or after entring
-        user.history.append(room)
-        room.entrylist.append(user)
+        entry.user = user
+        entry.room = room
+        entry.timestamp = int(round(time.time() * 1000))
+        entry.save()
+        user.history.append(entry)
+        room.entrylist.append(entry)
         user.save()
         room.save()
         return jsonify({'result': 'SUCCESS'}), 200

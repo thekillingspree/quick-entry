@@ -5,12 +5,12 @@ class Room(Document):
     '''
     Room Model
     A basic model for storing rooms created by admins. 
-    The entrylist property is a ListField containing a Reference to all the users who have entered the room.
+    The entrylist property is a ListField containing a Reference to all the entries.
     '''
     name = StringField(required=True)
     roomnumber = IntField(required=True)
     capacity = IntField(required=True)
-    entrylist = ListField(ReferenceField('User')) #String used, since User class is defined after Room
+    entrylist = ListField(ReferenceField('Entry')) #String used, since Entry class is defined after Room
 
 
 class User(Document):
@@ -26,8 +26,17 @@ class User(Document):
     password = StringField(required=True)
     tecid = StringField(required=True, unique=True)
     currentroom = ReferenceField(Room)
-    history = ListField(ReferenceField(Room))
+    history = ListField(ReferenceField('Entry'))
 
+
+class Entry(Document):
+    '''
+    Entry Model
+    Helps store entry specific data.
+    '''
+    user = ReferenceField(User)
+    room = ReferenceField(Room)
+    timestamp = LongField()
 
 class Admin(Document):
     '''
