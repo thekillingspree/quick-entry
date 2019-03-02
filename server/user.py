@@ -56,3 +56,19 @@ def login():
         return jsonify({'error': 'Please provide all the required fields'}), 400
     except Exception as e:
         return jsonify({'error': str(e)}), 400
+
+
+@user_routes.route('/api/users/profile', methods=['GET'])
+@user_login_required
+@user_is_authorized
+def profile():
+    try:
+        user = User.objects(id=g.user['id']).first()
+        userdict = json.loads(user.to_json())
+        del userdict['password']
+        userdict['history'] = []
+        for room in user.history:
+            userdict['history'].append(json.loads(room.to_json()))
+        return jsonify(userdict), 200
+    except Exception as e:
+        return {'error': str(e)}, 400
