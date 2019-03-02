@@ -33,7 +33,7 @@ def admin_is_authorized(f):
         try:
             token = request.headers['Authorization'].split()[1]
             payload = jwt.decode(token, SECRET, algorithms=['HS256'])
-            if not payload and json.loads(payload)['id'] != request.args.get('id'):
+            if (not payload) or payload['id'] != request.args.get('id'):
                 raise Exception('You are not authorized')
             return f(*args, **kwargs)
         except InvalidSignatureError:
@@ -72,7 +72,7 @@ def user_is_authorized(f):
         try:
             token = request.headers['Authorization'].split()[1]
             payload = jwt.decode(token, SECRET, algorithms=['HS256'])
-            if not payload and json.loads(payload)['id'] != request.args.get('uid'):
+            if not payload or payload['id'] != request.args.get('uid'):
                 raise Exception('You are not authorized.')
             return f(*args, **kwargs)
         except InvalidSignatureError:
