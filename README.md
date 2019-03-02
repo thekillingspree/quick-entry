@@ -1,6 +1,8 @@
 ﻿# Quick-Entry
 
-Quick-entry for ***Terna Engineering College***
+Quick-entry for ***Terna Engineering College***.
+Uses Flask, MongoDB with the mongoengine ODM on the backend. 
+Uses JWT token based authentication.
 
 ## Setup
 
