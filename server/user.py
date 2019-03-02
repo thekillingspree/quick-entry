@@ -77,9 +77,7 @@ def profile():
             userdict['currentroom'] = cd
         for entry in user.history:
             ed = json.loads(entry.to_json())
-            ed['room'] = json.loads(entry.room.to_json())
-            ed['user'] = json.loads(entry.user.to_json())
-            del ed['user']['password']
+            ed['room_name'] = json.loads(entry.room.to_json())['name']
             userdict['history'].append(ed)
         return jsonify(userdict), 200
     except Exception as e:

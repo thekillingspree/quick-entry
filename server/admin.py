@@ -59,6 +59,8 @@ def login():
 def getallrooms():
     try:
         admin = Admin.objects(id=g.admin['id']).first()
+        if (not admin):
+            raise Exception('Admin not found.')
         allrooms = []
         for room in admin.rooms:
             roomdict = json.loads(room.to_json())
