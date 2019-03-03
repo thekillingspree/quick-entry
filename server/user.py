@@ -76,6 +76,10 @@ def login():
 @user_login_required
 @user_is_authorized
 def profile():
+    '''
+    Returns a detailed profile of user in json format with status code 200.
+    User needs to authenticated and authorized to access this route, else returns error with status 401
+    '''
     try:
         user = User.objects(id=g.user['id']).first()
         if not user:
@@ -97,6 +101,13 @@ def profile():
 
 @user_routes.route('/api/users/enter', methods=['POST'])
 def enter():
+    '''
+    Route to create entries.
+    This POST request requires two fields, id -> the id of room and uid -> the id of user. Future implementations may switch uid with the tecid.
+    This POST request also needs a valid user.
+    Also checks if the room is full. If the room is full, returns a message with status code 400.
+    If user has already entered into the room, returns an error message with status code 400.
+    '''
     try:
         rid = request.json['id']
         room = Room.objects(id=rid).first()
@@ -129,6 +140,11 @@ def enter():
 
 @user_routes.route('/api/users/exit', methods=['POST'])
 def uexit():
+    '''
+    Route to record exits. This helps in storing the exit time of a user.
+    Also helps in providing insights on how much time an user spends inside the room on average.
+    Requires two fields, id and uid, which have the same meaning as the above /entry route.
+    '''
     try:
         rid = request.json['id']
         uid = request.json['uid']
