@@ -150,6 +150,14 @@ def uexit():
         uid = request.json['uid']
         room = Room.objects(id=rid).first()
         user = User.objects(id=uid).first()
+        if not user:
+            raise Exception('User not found. Please signup first.')
+        elif not room:
+            raise Exception('Room id is invalid.')
+        elif not user.currentroom:
+            raise Exception('Please enter a room first to exit.')
+        elif user.currentroom.id != room.id or not room:
+            raise Exception('You are not inside this room to exit.')
         for entry in room.entrylist:
             if entry.user.id == user.id:
                 entry.exittime = int(round(time.time() * 1000))
