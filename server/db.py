@@ -38,6 +38,7 @@ class Entry(Document):
     user = ReferenceField(User)
     room = ReferenceField(Room)
     timestamp = LongField()
+    exittime = LongField()
 
 class Admin(Document):
     '''

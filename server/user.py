@@ -126,3 +126,23 @@ def enter():
         return jsonify({'error': 'Please provide a valid id'}), 400
     except Exception as e:
         return jsonify({'error': str(e)}), 400
+
+@user_routes.route('/api/users/exit', methods=['POST'])
+def uexit():
+    try:
+        rid = request.json['id']
+        uid = request.json['uid']
+        room = Room.objects(id=rid).first()
+        user = User.objects(id=uid).first()
+        for entry in room.entrylist:
+            if entry.user.id == user.id:
+                entry.exittime = int(round(time.time() * 1000))
+                user.currentroom = None
+                entry.save()
+                user.save()
+                return jsonify({'message': 'Thank you for visitng {}'.format(room.name)}), 200
+        return jsonify({'message': 'Exit was not recorded due to some error.'}), 400
+    except KeyError:
+        return jsonify({'error': 'Please provide all the required data.'}), 400
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
