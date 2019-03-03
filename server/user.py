@@ -4,12 +4,22 @@ import bcrypt
 import jwt
 import json
 import time
+import re
 
 from middleware.login import user_login_required, user_is_authorized
 from db import User, Room, Entry
 from keys import SECRET
 
 user_routes = Blueprint('user_routes', __name__)
+
+def checkID(id):
+    '''
+    This function uses regex to check if the provided Terna ID No is valid.
+    '''
+    regex = r'^TU[A-Z]*[0-9]+[A-Z]+.{7}$'
+    m = re.search(regex, id)
+    return not not m
+
 
 @user_routes.route('/api/users/signup', methods=['POST'])
 def signin():
@@ -24,6 +34,8 @@ def signin():
         fullname = request.json['fullname']
         email = request.json['email']
         tecid = request.json['tecid'].upper()
+        if not checkID(tecid):
+            raise Exception('Please provide a valid TEC')
         unhashed = request.json['password']
         password = bcrypt.hashpw(unhashed.encode(), bcrypt.gensalt())
         user = User(username=username, fullname=fullname, email=email, tecid=tecid, password=password)
