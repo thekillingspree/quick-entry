@@ -4,8 +4,8 @@ import json
 import jwt
 from jwt.exceptions import *
 
-from db import Admin, User
-from keys import SECRET
+from ..db import Admin, User
+from ..keys import SECRET
 
 def admin_login_required(f):
     '''

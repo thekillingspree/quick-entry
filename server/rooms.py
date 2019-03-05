@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify, g
-from db import Admin, User, Room
-from keys import SECRET
-from middleware.login import *
+from .db import Admin, User, Room
+from .keys import SECRET
+from .middleware.login import *
 import json
 import jwt
 

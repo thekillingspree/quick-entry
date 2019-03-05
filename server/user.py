@@ -6,9 +6,9 @@ import json
 import time
 import re
 
-from middleware.login import user_login_required, user_is_authorized
-from db import User, Room, Entry
-from keys import SECRET
+from .middleware.login import user_login_required, user_is_authorized
+from .db import User, Room, Entry
+from .keys import SECRET
 
 user_routes = Blueprint('user_routes', __name__)
 

@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify, g
-from db import Admin
-from keys import SECRET
-from middleware.login import admin_login_required, admin_is_authorized
+from .db import Admin
+from .keys import SECRET
+from .middleware.login import admin_login_required, admin_is_authorized
 import bcrypt
 import json
 import jwt
