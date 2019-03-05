@@ -24,7 +24,7 @@ Install Required modules
 
     (venv) $ pip install -r requirements.txt
 
-##Starting the server
+## Starting the server
 
 On Linux
 
