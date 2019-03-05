@@ -25,6 +25,8 @@ Install Required modules
     (venv) $ pip install -r requirements.txt
 Starting the server
 
+On Linux
     (venv) $ gunicorn server.sever:app
+On Windows
     (venv) > waitress-serve --port=<port-number> server.sever:app
  
