@@ -26,7 +26,10 @@ Install Required modules
 Starting the server
 
 On Linux
+
     (venv) $ gunicorn server.sever:app
+    
 On Windows
+
     (venv) > waitress-serve --port=<port-number> server.sever:app
  
