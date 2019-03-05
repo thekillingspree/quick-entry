@@ -112,7 +112,7 @@ def enter():
         rid = request.json['id']
         room = Room.objects(id=rid).first()
         #TODO: Instead of uid, we have to use regex and validate the tecid of student. This will reduce database fetches on the client side.
-        user = User.objects(id=request.json['uid']).first() 
+        user = User.objects(tecid=request.json['uid']).first() 
         entry = Entry()
         if not user:
             raise Exception("You have not signed up.")
@@ -149,7 +149,7 @@ def uexit():
         rid = request.json['id']
         uid = request.json['uid']
         room = Room.objects(id=rid).first()
-        user = User.objects(id=uid).first()
+        user = User.objects(tecid=uid).first()
         if not user:
             raise Exception('User not found. Please signup first.')
         elif not room:
@@ -164,7 +164,7 @@ def uexit():
                 user.currentroom = None
                 entry.save()
                 user.save()
-                return jsonify({'message': 'Thank you for visitng {}'.format(room.name)}), 200
+                return jsonify({'message': 'Thank you for visitng {}.'.format(room.name)}), 200
         return jsonify({'message': 'Exit was not recorded due to some error.'}), 400
     except KeyError:
         return jsonify({'error': 'Please provide all the required data.'}), 400
