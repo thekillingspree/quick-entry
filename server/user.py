@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, g
-from mongoengine.errors import ValidationError
+from mongoengine.errors import ValidationError, NotUniqueError
 import bcrypt
 import jwt
 import json
@@ -34,6 +34,12 @@ def signin():
         fullname = request.json['fullname']
         email = request.json['email']
         tecid = request.json['tecid'].upper()
+        if User.objects(username=username).first():
+            raise Exception('Username already taken.')
+        if User.objects(email=email).first():
+            raise Exception('Email has been already registered.')
+        if User.objects(tecid=tecid).first():
+            raise Exception('Account with the provided TEC ID already exists.')
         if not checkID(tecid):
             raise Exception('Please provide a valid TEC')
         unhashed = request.json['password']

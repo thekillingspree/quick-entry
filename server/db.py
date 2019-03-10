@@ -23,7 +23,7 @@ class User(Document):
     '''
     username = StringField(required=True, unique=True)
     fullname = StringField(required=True)
-    email = StringField(required=True)
+    email = StringField(required=True, unique=True)
     password = StringField(required=True)
     tecid = StringField(required=True, unique=True)
     currentroom = ReferenceField(Room)
