@@ -41,7 +41,7 @@ def signin():
         if User.objects(tecid=tecid).first():
             raise Exception('Account with the provided TEC ID already exists.')
         if not checkID(tecid):
-            raise Exception('Please provide a valid TEC')
+            raise Exception('Please provide a valid TEC-ID')
         unhashed = request.json['password']
         password = bcrypt.hashpw(unhashed.encode(), bcrypt.gensalt())
         user = User(username=username, fullname=fullname, email=email, tecid=tecid, password=password)
