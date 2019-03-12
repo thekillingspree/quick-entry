@@ -20,6 +20,10 @@ def admsignup():
         username = request.json['username']
         fname = request.json['fname']
         email = request.json['email']
+        if Admin.objects(username=username).first():
+            raise Exception('Username taken. Please choose another username.')
+        if Admin.objects(email=email).first():
+            raise Exception('This email belongs to a registered Admin. Please login.')
         unhashed = request.json['password'].encode()
         password = bcrypt.hashpw(unhashed, bcrypt.gensalt())
         admin = Admin(username=username, fname=fname, password=password, email=email)
