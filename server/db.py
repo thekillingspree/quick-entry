@@ -49,4 +49,5 @@ class Admin(Document):
     username = StringField(required=True, unique=True)
     password = StringField(required=True)
     fname = StringField(required=True)
+    email = StringField(required=True, unique=True)
     rooms = ListField(ReferenceField(Room, reverse_delete_rule=CASCADE))
