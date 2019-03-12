@@ -19,11 +19,12 @@ def admsignup():
     try:
         username = request.json['username']
         fname = request.json['fname']
+        email = request.json['email']
         unhashed = request.json['password'].encode()
         password = bcrypt.hashpw(unhashed, bcrypt.gensalt())
-        admin = Admin(username=username, fname=fname, password=password)
+        admin = Admin(username=username, fname=fname, password=password, email=email)
         admin.save()
-        token = jwt.encode({"id": str(admin.id), "username": admin.username, "fname": admin.fname}, SECRET, algorithm='HS256')
+        token = jwt.encode({"id": str(admin.id), "username": admin.username, "fname": admin.fname, "email": admin.email}, SECRET, algorithm='HS256')
         return jsonify({"result": json.loads(admin.to_json()), "token": token.decode()}), 200
     except KeyError:
         return jsonify({"error": "Need all values"}), 400
