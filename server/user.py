@@ -69,8 +69,10 @@ def login():
         password = request.json['password']
         user = User.objects(username=username).first()
         if user and bcrypt.checkpw(password.encode(), user.password.encode()):
+            userdict = json.loads(user.to_json())
+            del userdict['password']        
             token = jwt.encode({'id': str(user.id), 'username': user.username, 'fullname': user.fullname, 'tecid': user.tecid, 'email': user.email}, SECRET, algorithm='HS256')
-            return jsonify({'result': json.loads(user.to_json()), 'token': token.decode()}), 200
+            return jsonify({'result': json.loads(userdict), 'token': token.decode()}), 200
         else:
             raise Exception('Username or password Incorrect') 
 
