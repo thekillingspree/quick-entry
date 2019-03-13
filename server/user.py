@@ -47,7 +47,9 @@ def signin():
         user = User(username=username, fullname=fullname, email=email, tecid=tecid, password=password)
         user.save()
         token = jwt.encode({'id': str(user.id), 'username': user.username, 'fullname': user.fullname, 'tecid': user.tecid, 'email': user.email}, SECRET, algorithm='HS256')
-        return jsonify({'result': json.loads(user.to_json()), 'token': token.decode()}), 200
+        userdict = json.loads(user.to_json())
+        del userdict['password']
+        return jsonify({'result': userdict , 'token': token.decode()}), 200
     except KeyError:
         return jsonify({'errors': 'Please provide all the required fields'}), 400
     except Exception as e:
