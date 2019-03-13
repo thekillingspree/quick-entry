@@ -29,7 +29,9 @@ def admsignup():
         admin = Admin(username=username, fname=fname, password=password, email=email)
         admin.save()
         token = jwt.encode({"id": str(admin.id), "username": admin.username, "fname": admin.fname, "email": admin.email}, SECRET, algorithm='HS256')
-        return jsonify({"result": json.loads(admin.to_json()), "token": token.decode()}), 200
+        admdict = json.loads(admin.to_json())
+        del admdict['password']
+        return jsonify({"result": admdict, "token": token.decode()}), 200
     except KeyError:
         return jsonify({"error": "Need all values"}), 400
     except Exception as e:
@@ -51,7 +53,9 @@ def login():
             raise Exception("Username or password incorrect")
         if bcrypt.checkpw(password.encode(), admin.password.encode()):
             token = jwt.encode({"id": str(admin.id), "username": admin.username, "fname": admin.fname}, SECRET, algorithm='HS256')
-            return jsonify({"status": "SUCCESS", "code": 200, "token": token.decode()}), 200
+            admdict = json.loads(admin.to_json())
+            del admdict['password']
+            return jsonify({"result": admdict, "token": token.decode()}), 200
         raise Exception("Username or password incorrect")
     except KeyError:
         return jsonify({"error": "Need all values"}), 400
