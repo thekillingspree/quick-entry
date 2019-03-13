@@ -72,7 +72,7 @@ def login():
             userdict = json.loads(user.to_json())
             del userdict['password']        
             token = jwt.encode({'id': str(user.id), 'username': user.username, 'fullname': user.fullname, 'tecid': user.tecid, 'email': user.email}, SECRET, algorithm='HS256')
-            return jsonify({'result': json.loads(userdict), 'token': token.decode()}), 200
+            return jsonify({'result': userdict, 'token': token.decode()}), 200
         else:
             raise Exception('Username or password Incorrect') 
 
