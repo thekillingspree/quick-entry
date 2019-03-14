@@ -176,6 +176,7 @@ def uexit():
                 room.current = room.current - 1
                 user.currentroom = None
                 entry.save()
+                room.save()
                 user.save()
                 return jsonify({'message': 'Thank you for visitng {}.'.format(room.name)}), 200
         return jsonify({'message': 'Exit was not recorded due to some error.'}), 400
