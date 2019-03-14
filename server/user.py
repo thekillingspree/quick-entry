@@ -127,6 +127,8 @@ def enter():
         entry = Entry()
         if not user:
             raise Exception("You have not signed up.")
+        if not room:
+            raise Exception('Invalid Room id')
         if user.currentroom and (user.currentroom.id == room.id):
             raise Exception('You have already entered inside the room.')
         if room.current == room.capacity:
