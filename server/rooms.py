@@ -29,6 +29,6 @@ def create():
     except KeyError:
         return jsonify({'error': 'Please provide all fields'}), 400
     except Exception as e:
-        return jsonify({'error': str(e)})
+        return jsonify({'error': str(e)}), 400
 
 
