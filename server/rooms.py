@@ -31,4 +31,25 @@ def create():
     except Exception as e:
         return jsonify({'error': str(e)}), 400
 
-
+@room_routes.route('/api/rooms/view', methods=['GET'])
+@admin_login_required
+@admin_is_authorized
+def viewroom():
+    try:
+        admin = Admin.objects(id=g.admin['id']).first()
+        rid = request.args.get('rid')
+        if not rid:
+            raise Exception('Please provide room id.')
+        room = Room.objects(id=rid).first().select_related(max_depth=4)
+        res = json.loads(room.to_json())
+        res['entrylist'] = []
+        for entry in room.entrylist:
+            u = entry.user
+            d = json.loads(entry.to_json())
+            d['user'] = {'fullname': u.fullname, 'tecid': u.tecid}
+            res['entrylist'].append(d)
+        return jsonify(res), 200
+    except KeyError:
+        return jsonify({'error': 'Please provide all fields'}), 400
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
