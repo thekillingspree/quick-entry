@@ -39,6 +39,7 @@ def signin():
         if User.objects(email=email).first():
             raise Exception('Email has been already registered.')
         if User.objects(tecid=tecid).first():
+            #TODO: SHOW Email for discrepancies
             raise Exception('Account with the provided TEC ID already exists.')
         if not checkID(tecid):
             raise Exception('Please provide a valid TEC-ID')
@@ -131,6 +132,7 @@ def enter():
         if room.current == room.capacity:
             raise Exception('Room full. You cannot enter now. Please come again after sometime.')
         user.currentroom = room
+        room.current = room.current + 1
         #TODO: Decide whether to add room to history on entering or after entring
         entry.user = user
         entry.room = room
@@ -171,6 +173,7 @@ def uexit():
         for entry in room.entrylist:
             if entry.user.id == user.id:
                 entry.exittime = int(round(time.time() * 1000))
+                room.current = room.current - 1
                 user.currentroom = None
                 entry.save()
                 user.save()
