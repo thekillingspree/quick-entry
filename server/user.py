@@ -173,7 +173,7 @@ def uexit():
         elif user.currentroom.id != room.id or not room:
             raise Exception('You are not inside this room to exit.')
         for entry in room.entrylist:
-            if entry.user.id == user.id:
+            if entry.user.id == user.id and not entry.exittime:
                 entry.exittime = int(round(time.time() * 1000))
                 room.current = room.current - 1
                 user.currentroom = None
