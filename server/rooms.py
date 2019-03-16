@@ -40,7 +40,7 @@ def viewroom():
         rid = request.args.get('rid')
         if not rid:
             raise Exception('Please provide room id.')
-        room = Room.objects(id=rid).first().select_related(max_depth=4)
+        room = Room.objects(id=rid).first()
         res = json.loads(room.to_json())
         res['entrylist'] = []
         for entry in room.entrylist:
