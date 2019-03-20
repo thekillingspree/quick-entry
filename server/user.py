@@ -126,7 +126,7 @@ def enter():
         user = User.objects(tecid=request.json['uid']).first() 
         entry = Entry()
         if not user:
-            raise Exception("You have not signed up.")
+            raise Exception("You have either provided an unsupported QR/Barcode or you have not signed up with Quick Entry.")
         if not room:
             raise Exception('Invalid Room id')
         if user.currentroom and (user.currentroom.id == room.id):
