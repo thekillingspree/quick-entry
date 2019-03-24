@@ -9,6 +9,7 @@ import re
 from .middleware.login import user_login_required, user_is_authorized
 from .db import User, Room, Entry
 from .keys import SECRET
+from .utils import checkpw
 
 user_routes = Blueprint('user_routes', __name__)
 
@@ -44,6 +45,8 @@ def signin():
         if not checkID(tecid):
             raise Exception('Please provide a valid TEC-ID')
         unhashed = request.json['password']
+        if not checkpw(unhashed):
+            raise Exception('Password must be at least 6 characters long and must contain a number.')
         password = bcrypt.hashpw(unhashed.encode(), bcrypt.gensalt())
         user = User(username=username, fullname=fullname, email=email, tecid=tecid, password=password)
         user.save()

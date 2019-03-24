@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify, g
 from .db import Admin
 from .keys import SECRET
+from .utils import checkpw
 from .middleware.login import admin_login_required, admin_is_authorized
 import bcrypt
 import json
@@ -24,8 +25,10 @@ def admsignup():
             raise Exception('Username taken. Please choose another username.')
         if Admin.objects(email=email).first():
             raise Exception('This email belongs to a registered Admin. Please login.')
-        unhashed = request.json['password'].encode()
-        password = bcrypt.hashpw(unhashed, bcrypt.gensalt())
+        unhashed = request.json['password']
+        if not checkpw(unhashed):
+            raise Exception('Password must be at least 6 characters long and must contain a number.')
+        password = bcrypt.hashpw(unhashed.encode(), bcrypt.gensalt())
         admin = Admin(username=username, fname=fname, password=password, email=email)
         admin.save()
         token = jwt.encode({"id": str(admin.id), "username": admin.username, "fname": admin.fname, "email": admin.email}, SECRET, algorithm='HS256')
