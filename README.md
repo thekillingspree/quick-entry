@@ -1,6 +1,16 @@
 ﻿# Quick-Entry
 
 Quick-entry for ***Terna Engineering College***.
+●Quick-Entry is an Entry Management system
+●rooms like the Library, Reading Room, Reference Room etc
+which require students to enter their name, ID number, date and
+time of entry
+●This becomes quite a lengthy process and often leads to a long
+queue near the entry register
+● Quick-Entry is a solution to handle this type of situations with
+ease
+
+
 Uses Flask, MongoDB with the mongoengine ODM on the backend. 
 Uses JWT token based authentication.
 
