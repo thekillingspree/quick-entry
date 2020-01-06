@@ -19,6 +19,6 @@ pylint==2.3.0
 pymongo==3.7.2
 six==1.12.0
 typed-ast==1.2.0
-waitress==1.2.1
+waitress==1.4.2
 Werkzeug==0.15.3
 wrapt==1.11.1
